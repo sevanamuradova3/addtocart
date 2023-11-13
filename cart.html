@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sepet</title>
+</head>
+<body>
+
+<div id="cart-list"></div>
+
+<script>
+  const cartList = document.getElementById('cart-list');
+
+  // 
+  window.onload = function() {
+    displayCart();
+  };
+
+  // 
+  function displayCart() {
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+    if (cartItems.length === 0) {
+      cartList.innerHTML = '<p>Sepet boş.</p>';
+    } else {
+      cartList.innerHTML = ''; 
+      // 
+      cartItems.forEach(product => {
+        const itemDiv = document.createElement('div');
+        itemDiv.innerHTML = `<p>${product.productName} - ${product.unitPrice} TL</p>`;
+        
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Sil';
+        deleteButton.addEventListener('click', () => removeFromCart(product));
+        itemDiv.appendChild(deleteButton);
+        
+        cartList.appendChild(itemDiv);
+      });
+    }
+  }
+
+  // 
+  function removeFromCart(product) {
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const updatedCart = cartItems.filter(item => item.productId !== product.productId);
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
+    displayCart(); // 
+  }
+</script>
+
+</body>
+</html>
